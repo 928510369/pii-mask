@@ -1,44 +1,14 @@
-services:
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - /etc/nginx/ssl:/etc/nginx/ssl:ro
-    expose:
-      - "80"
-    depends_on:
-      - backend
-      - frontend
-    restart: unless-stopped
-
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    expose:
-      - "8000"
-    env_file:
-      - ./backend/.env
-    restart: unless-stopped
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    expose:
-      - "80"
-    depends_on:
-      - backend
-    restart: unless-stopped
-
-  vllm:
-    image: vllm/vllm-openai:v0.5.3
+vllm:
+    image: vllm/vllm-openai:latest
     profiles:
       - gpu
     expose:
       - "8001"
+    environment:
+      # 显式告诉 vLLM 忽略 FA2，强制使用兼容 T4 的 kernels
+      - VLLM_USE_XFORMERS=1
+      # 某些情况下防止 NCCL 在旧卡上尝试 P2P 导致崩溃
+      - NCCL_P2P_DISABLE=1
     volumes:
       - vllm-cache:/root/.cache
     deploy:
@@ -53,9 +23,10 @@ services:
       "--port", "8001",
       "--model", "Qwen/Qwen3-0.6B",
       "--max-num-seqs", "8",
-      "--gpu-memory-utilization", "0.8"
+      "--gpu-memory-utilization", "0.8",
+      "--attn-backend", "xformers",  # 必须：T4 不支持默认的 FlashAttention-2
+      "--enforce-eager",             # 建议：防止 torch.compile 在 16G 显存上溢出
+      "--max-model-len", "4096",     # 建议：限制长度以保护 T4 有限的显存
+      "--trust-remote-code"          # Qwen 模型通常需要此参数
     ]
     restart: unless-stopped
-
-volumes:
-  vllm-cache:
