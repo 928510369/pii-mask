@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:8000';
+// 使用相对路径，让请求通过当前页面的协议和域名
+const API_BASE = '/api';
 
 const api = axios.create({
   baseURL: API_BASE,
