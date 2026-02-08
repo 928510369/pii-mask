@@ -52,8 +52,10 @@ class LLMService:
     """Unified LLM service supporting both local vLLM and cloud DashScope API."""
 
     def __init__(self):
+        # For local vLLM, use dummy API key to avoid Bearer header issues
+        api_key = settings.LLM_API_KEY if settings.LLM_API_KEY else "sk-dummy-key-for-local"
         self.client = OpenAI(
-            api_key=settings.LLM_API_KEY,
+            api_key=api_key,
             base_url=settings.LLM_API_BASE,
         )
         self.model = settings.LLM_MODEL
