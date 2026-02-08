@@ -11,6 +11,7 @@ class Settings:
     )
     LLM_API_KEY: str = os.getenv("LLM_API_KEY", "EMPTY")
     LLM_MODEL: str = os.getenv("LLM_MODEL", "qwen3-0.6b")
+    BACKEND_HOST: str = os.getenv("BACKEND_HOST", "0.0.0.0")
     BACKEND_PORT: int = int(os.getenv("BACKEND_PORT", "8000"))
 
 

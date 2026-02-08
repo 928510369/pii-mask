@@ -52,6 +52,7 @@ Start the backend:
 
 ```bash
 cd ..  # Return to project root
+# For public deployment, bind to all interfaces
 PYTHONPATH=. uvicorn backend.app.main:app --host 0.0.0.0 --port 8000
 ```
 
@@ -147,8 +148,8 @@ docker-compose --profile gpu up -d
 
 | Service | Default Port | Configurable |
 |---------|-------------|-------------|
-| Frontend (dev) | 5173 | `vite.config.ts` |
-| Backend API | 8000 | `uvicorn --port` |
+| Frontend (prod) | 443 (HTTPS) | Nginx config |
+| Backend API | 8000 (internal) | `uvicorn --port` |
 | vLLM (local) | 8001 | `start_vllm.sh` |
 
 ---

@@ -8,13 +8,13 @@ A modern web application for detecting and masking Personally Identifiable Infor
 ┌─────────────────────────────────────────────────────┐
 │                   Frontend (React)                   │
 │          Vite + TypeScript + Axios                   │
-│              Port: 5173                              │
+│              HTTPS:443                                │
 └───────────────────────┬─────────────────────────────┘
-                        │ HTTP (REST API)
+                        │ HTTPS (REST API)
 ┌───────────────────────▼─────────────────────────────┐
 │                Backend (FastAPI)                      │
 │          Document Parser + PII Masking               │
-│              Port: 8000                              │
+│              Internal Port: 8000                     │
 └───────────────────────┬─────────────────────────────┘
                         │ OpenAI-compatible API
 ┌───────────────────────▼─────────────────────────────┐
@@ -69,7 +69,7 @@ npm install
 ```bash
 # Terminal 1: Backend
 cd backend
-PYTHONPATH=.. uvicorn app.main:app --reload --port 8000
+PYTHONPATH=.. uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 # Terminal 2: Frontend
 cd frontend
