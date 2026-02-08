@@ -62,7 +62,7 @@ services:
       "--max-num-seqs", "8",
       "--gpu-memory-utilization", "0.8",
       "--enforce-eager",
-      "--max-model-len", "16384",
+      "--max-model-len", "32768",
       "--trust-remote-code"
     ]
     restart: unless-stopped
