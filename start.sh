@@ -19,16 +19,16 @@ echo "🏗️  构建自定义服务镜像..."
 sudo docker compose build --no-cache backend frontend nginx
 
 echo "📦 启动所有服务（包含GPU模式）..."
-sudo docker-compose --profile gpu up -d
+sudo docker compose --profile gpu up -d
 
 echo "⏳ 等待服务启动..."
 sleep 10
 
 echo "🔍 检查服务状态..."
-sudo docker-compose ps
+sudo docker compose ps
 
 echo "📋 显示服务日志概览..."
-sudo docker-compose logs --tail=10
+sudo docker compose logs --tail=10
 
 echo "✅ 启动完成！"
 echo "🌐 访问地址: https://47.236.69.6"
