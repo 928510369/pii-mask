@@ -10,13 +10,13 @@ if [ ! -f "docker-compose.yml" ]; then
 fi
 
 echo "⏹️  停止所有服务..."
-sudo docker-compose --profile gpu down
+sudo docker compose --profile gpu down
 
 echo "🧹 清理未使用的资源..."
 sudo docker system prune -f
 
 echo "📊 当前运行的容器:"
-sudo docker ps
+sudo docker compose ps
 
 echo "✅ 服务已停止"
 echo "🔧 如需重新启动，请运行: ./start.sh"
