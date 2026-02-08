@@ -1,4 +1,39 @@
-vllm:
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/nginx/ssl:/etc/nginx/ssl:ro
+    expose:
+      - "80"
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    expose:
+      - "8000"
+    env_file:
+      - ./backend/.env
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    expose:
+      - "80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  vllm:
     image: vllm/vllm-openai:latest
     profiles:
       - gpu
@@ -30,3 +65,6 @@ vllm:
       "--trust-remote-code"          # Qwen 模型通常需要此参数
     ]
     restart: unless-stopped
+
+volumes:
+  vllm-cache:
