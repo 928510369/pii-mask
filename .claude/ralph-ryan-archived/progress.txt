@@ -1,0 +1,17 @@
+## Codebase Patterns
+
+(Patterns discovered during implementation will be added here)
+
+---
+
+# Progress Log
+
+## 2026-02-08 - US-001: Project Scaffolding
+- Initialized React+TypeScript+Vite frontend in frontend/
+- Initialized Python FastAPI backend in backend/
+- Created .env.example and .env with DashScope cloud config
+- Installed all dependencies
+- **Learnings:**
+  - Vite 7.x with React 19 template works well
+  - Backend runs via `uvicorn backend.app.main:app` from project root
+---

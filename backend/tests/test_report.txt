@@ -1,0 +1,79 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.10, pytest-9.0.2, pluggy-1.6.0 -- /Users/tan/Desktop/project/pii-mask/.venv/bin/python3.12
+cachedir: .pytest_cache
+rootdir: /Users/tan/Desktop/project/pii-mask
+plugins: anyio-4.12.1, asyncio-1.3.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 41 items
+
+backend/tests/test_api.py::TestHealthEndpoint::test_health_check PASSED  [  2%]
+backend/tests/test_api.py::TestUploadEndpoint::test_upload_txt PASSED    [  4%]
+backend/tests/test_api.py::TestUploadEndpoint::test_upload_csv PASSED    [  7%]
+backend/tests/test_api.py::TestUploadEndpoint::test_upload_unsupported_type PASSED [  9%]
+backend/tests/test_api.py::TestMaskEndpoint::test_mask_pii_success PASSED [ 12%]
+backend/tests/test_api.py::TestMaskEndpoint::test_mask_empty_text PASSED [ 14%]
+backend/tests/test_api.py::TestMaskEndpoint::test_mask_llm_error PASSED  [ 17%]
+backend/tests/test_api.py::TestMaskEndpoint::test_mask_no_pii_found PASSED [ 19%]
+backend/tests/test_api.py::TestMaskEndpoint::test_mask_multiple_detections PASSED [ 21%]
+backend/tests/test_api.py::TestMaskEndpoint::test_mask_default_categories PASSED [ 24%]
+backend/tests/test_document_parser.py::TestParseDocument::test_parse_txt PASSED [ 26%]
+backend/tests/test_document_parser.py::TestParseDocument::test_parse_txt_utf8 PASSED [ 29%]
+backend/tests/test_document_parser.py::TestParseDocument::test_parse_csv PASSED [ 31%]
+backend/tests/test_document_parser.py::TestParseDocument::test_parse_xlsx PASSED [ 34%]
+backend/tests/test_document_parser.py::TestParseDocument::test_parse_docx PASSED [ 36%]
+backend/tests/test_document_parser.py::TestParseDocument::test_parse_pdf PASSED [ 39%]
+backend/tests/test_document_parser.py::TestParseDocument::test_unsupported_file_type PASSED [ 41%]
+backend/tests/test_document_parser.py::TestParseDocument::test_unsupported_file_no_extension PASSED [ 43%]
+backend/tests/test_document_parser.py::TestParseDocument::test_supported_extensions PASSED [ 46%]
+backend/tests/test_integration.py::TestDashScopeIntegration::test_english_name_detection PASSED [ 48%]
+backend/tests/test_integration.py::TestDashScopeIntegration::test_chinese_name_detection FAILED [ 51%]
+backend/tests/test_integration.py::TestDashScopeIntegration::test_phone_detection PASSED [ 53%]
+backend/tests/test_integration.py::TestDashScopeIntegration::test_email_detection PASSED [ 56%]
+backend/tests/test_integration.py::TestDashScopeIntegration::test_address_detection PASSED [ 58%]
+backend/tests/test_integration.py::TestDashScopeIntegration::test_multiple_categories PASSED [ 60%]
+backend/tests/test_integration.py::TestDashScopeIntegration::test_no_pii_text PASSED [ 63%]
+backend/tests/test_integration.py::TestDashScopeIntegration::test_performance PASSED [ 65%]
+backend/tests/test_integration.py::TestDashScopeIntegration::test_chinese_mixed_pii PASSED [ 68%]
+backend/tests/test_integration.py::TestDashScopeIntegration::test_social_media_detection PASSED [ 70%]
+backend/tests/test_llm_service.py::TestExtractJsonFromText::test_direct_json PASSED [ 73%]
+backend/tests/test_llm_service.py::TestExtractJsonFromText::test_json_with_thinking_block PASSED [ 75%]
+backend/tests/test_llm_service.py::TestExtractJsonFromText::test_json_in_code_block PASSED [ 78%]
+backend/tests/test_llm_service.py::TestExtractJsonFromText::test_empty_detections PASSED [ 80%]
+backend/tests/test_llm_service.py::TestExtractJsonFromText::test_invalid_json PASSED [ 82%]
+backend/tests/test_llm_service.py::TestExtractJsonFromText::test_json_with_surrounding_text PASSED [ 85%]
+backend/tests/test_llm_service.py::TestExtractJsonFromText::test_whitespace_handling PASSED [ 87%]
+backend/tests/test_llm_service.py::TestLLMServiceConfig::test_cloud_mode_init PASSED [ 90%]
+backend/tests/test_llm_service.py::TestLLMServiceConfig::test_local_mode_init PASSED [ 92%]
+backend/tests/test_llm_service.py::TestLLMServiceDetectPII::test_detect_pii_mock PASSED [ 95%]
+backend/tests/test_llm_service.py::TestLLMServiceDetectPII::test_detect_pii_api_error PASSED [ 97%]
+backend/tests/test_llm_service.py::TestLLMServiceDetectPII::test_detect_pii_malformed_response PASSED [100%]
+
+=================================== FAILURES ===================================
+_____________ TestDashScopeIntegration.test_chinese_name_detection _____________
+
+self = <tests.test_integration.TestDashScopeIntegration object at 0x10bb30350>
+llm_service = <backend.app.llm_service.LLMService object at 0x10bb89820>
+
+    def test_chinese_name_detection(self, llm_service):
+        result = run_async(llm_service.detect_pii(
+            "我叫张三，在北京工作。",
+            ["name"]
+        ))
+>       assert len(result["detections"]) >= 1
+E       assert 0 >= 1
+E        +  where 0 = len([])
+
+backend/tests/test_integration.py:42: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/PyPDF2/__init__.py:21
+  /Users/tan/Desktop/project/pii-mask/.venv/lib/python3.12/site-packages/PyPDF2/__init__.py:21: DeprecationWarning: PyPDF2 is deprecated. Please move to the pypdf library instead.
+    warnings.warn(
+
+backend/tests/test_integration.py::TestDashScopeIntegration::test_english_name_detection
+  /Users/tan/Desktop/project/pii-mask/backend/tests/test_integration.py:20: DeprecationWarning: There is no current event loop
+    return asyncio.get_event_loop().run_until_complete(coro)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED backend/tests/test_integration.py::TestDashScopeIntegration::test_chinese_name_detection
+=================== 1 failed, 40 passed, 2 warnings in 5.10s ===================
