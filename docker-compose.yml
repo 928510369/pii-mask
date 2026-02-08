@@ -54,15 +54,16 @@ services:
               count: 1
               capabilities: [gpu]
     command: [
+      "vllm",
+      "serve",
+      "Qwen/Qwen3-0.6B",
       "--host", "0.0.0.0",
       "--port", "8001",
-      "--model", "Qwen/Qwen3-0.6B",
       "--max-num-seqs", "8",
       "--gpu-memory-utilization", "0.8",
-      "--attn-backend", "xformers",  # 必须：T4 不支持默认的 FlashAttention-2
-      "--enforce-eager",             # 建议：防止 torch.compile 在 16G 显存上溢出
-      "--max-model-len", "4096",     # 建议：限制长度以保护 T4 有限的显存
-      "--trust-remote-code"          # Qwen 模型通常需要此参数
+      "--enforce-eager",
+      "--max-model-len", "4096",
+      "--trust-remote-code"
     ]
     restart: unless-stopped
 
