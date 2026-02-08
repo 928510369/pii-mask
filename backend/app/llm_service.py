@@ -104,7 +104,7 @@ class LLMService:
                 ],
                 temperature=0.7,
                 top_p=0.8,
-                max_tokens=2000,  # 降低到安全范围，留出输入空间
+                max_tokens=8000,  # 降低到安全范围，留出输入空间
                 **extra_params,
             )
 
