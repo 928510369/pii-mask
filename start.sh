@@ -16,7 +16,7 @@ echo "🧹 清理旧的构建缓存..."
 sudo docker builder prune -f
 
 echo "🏗️  构建自定义服务镜像..."
-sudo docker-compose build --no-cache backend frontend nginx
+sudo docker compose build --no-cache backend frontend nginx
 
 echo "📦 启动所有服务（包含GPU模式）..."
 sudo docker-compose --profile gpu up -d
