@@ -23,20 +23,20 @@ export interface MaskResponse {
 export async function uploadDocument(file: File): Promise<string> {
   const formData = new FormData();
   formData.append('file', file);
-  const response = await api.post<{ text: string }>('/api/upload', formData, {
+  const response = await api.post<{ text: string }>('/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
   return response.data.text;
 }
 
 export async function maskPII(text: string, categories: string[]): Promise<MaskResponse> {
-  const response = await api.post<MaskResponse>('/api/mask', { text, categories });
+  const response = await api.post<MaskResponse>('/mask', { text, categories });
   return response.data;
 }
 
 export async function healthCheck(): Promise<boolean> {
   try {
-    await api.get('/api/health');
+    await api.get('/health');
     return true;
   } catch {
     return false;
