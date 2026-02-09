@@ -100,6 +100,9 @@ Detect ONLY the following categories based on user-defined needs:
 - Bank/ID: Capture 15-19 digit sequences, especially those with bank names or "尾号" context.
 - Custom Logic: If a user provides a custom category, treat its description as a high-priority semantic rule.
 
+### Requirement
+Perform a comprehensive scan, outputting as many identified or suspected entities as possible, without missing any.
+
 ### OUTPUT CONSTRAINT
 - Response MUST be a single, valid JSON object.
 - NO markdown markers (no ```json). NO introductory text. NO trailing explanations.
