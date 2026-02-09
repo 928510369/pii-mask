@@ -60,10 +60,10 @@ services:
       "--host", "0.0.0.0",
       "--port", "8001",
       "--trust-remote-code",
-      "--dtype", "half",
+      "--dtype", "float16",
       "--max-model-len", "32768",
       "--gpu-memory-utilization", "0.90",
-      "--max-num-seqs", "2",
+      "--max-num-seqs", "1",
       "--enforce-eager",
       "--disable-log-stats"
     ]
