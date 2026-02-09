@@ -68,22 +68,43 @@ class LLMService:
         """
         categories_str = ", ".join(categories)
 
-        system_prompt = (
-            "You are a PII (Personally Identifiable Information) detection specialist. "
-            "Your task is to identify all PII in the given text based on the specified categories. "
-            "You MUST respond with ONLY a valid JSON object, no other text. "
-            "Do not wrap the JSON in markdown code blocks. Do not include any explanation.\n\n"
-            "Response format:\n"
-            '{"detections": [{"type": "category_name", "original": "the exact PII text found"}]}\n\n'
-            "If no PII is found, return: {\"detections\": []}\n\n"
-            "Rules:\n"
-            "- original must be the EXACT substring from the input text\n"
-            "- type must be one of the specified categories\n"
-            "- Detect ALL occurrences, not just the first one\n"
-            "- Be thorough but precise\n"
-            "- ONLY output JSON, nothing else"
-        )
+        system_prompt = """You are an expert PII Recognition Engine. Your goal is to achieve 100% recall on sensitive data, including standard PII and custom categories provided by the user.
 
+
+
+[Target Categories]
+
+Your detection task is STRICTLY limited to the following categories:
+
+{USER_DEFINED_CATEGORIES}
+
+
+
+[Scanning Strategy]
+
+1. Pattern Robustness: Treat "1三8" as "138", "zero" as "0", and ignore separators like "-", " ", or ".". 
+
+2. Semantic Extension: If a user provides a custom category, analyze its definition and identify related substrings even if the format is irregular.
+
+3. Context Clues: Use surrounding keywords (e.g., "Account:", "Located at", "Contact") to confirm entity boundaries.
+
+4. NO Hallucination: Exclude common non-PII numbers like dates, prices, or version numbers unless they explicitly match a category.
+
+
+
+[Entity Integrity]
+
+- Capture the FULL substring. For example, if "WeChat: user123" is found, the original should be the entire phrase if it provides necessary context for that category.
+
+
+
+[Output Constraint]
+
+- Response MUST be a single, valid JSON object.
+
+- NO markdown markers, NO prose, NO explanations.
+
+- Format: {"detections": [{"type": "category_name", "original": "EXACT_SUBSTRING"}]}"""
         user_prompt = (
             f"Categories to detect: {categories_str}\n\n"
             f"Text to analyze:\n{text}"
