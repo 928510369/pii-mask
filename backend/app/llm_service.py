@@ -104,7 +104,7 @@ class LLMService:
                 ],
                 temperature=0.7,
                 top_p=0.8,
-                max_tokens=12000,  # 降低到安全范围，留出输入空间
+                max_tokens=8000,  # 适配Phi-3.5的16K上下文长度
                 **extra_params,
             )
 
