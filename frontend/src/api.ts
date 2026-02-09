@@ -5,7 +5,7 @@ const API_BASE = '/api';
 
 const api = axios.create({
   baseURL: API_BASE,
-  timeout: 60000,
+  timeout: 300000,  // 5分钟超时
 });
 
 export interface Detection {
