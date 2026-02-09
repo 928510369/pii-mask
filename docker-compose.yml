@@ -56,14 +56,15 @@ services:
     # 注意：这里直接写参数，不要加 "vllm" 和 "serve"
     # 如果镜像报错找不到模型，请尝试将模型名作为第一个参数
     command: [
-      "--model", "iiiorg/piiranha-v1-detect-personal-information",
+      "--model", "microsoft/Phi-3.5-mini-instruct",
       "--host", "0.0.0.0",
       "--port", "8001",
       "--max-num-seqs", "8",
       "--gpu-memory-utilization", "0.8",
       "--enforce-eager",
-      "--max-model-len", "32768",
-      "--trust-remote-code"
+      "--max-model-len", "16384",
+      "--trust-remote-code",
+      "--dtype", "half"  # 启用FP16模式优化T4性能
     ]
     restart: unless-stopped
 
