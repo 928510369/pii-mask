@@ -125,7 +125,7 @@ Your detection task is STRICTLY limited to the following categories:
                 ],
                 temperature=0.7,
                 top_p=0.8,
-                max_tokens=8000,  # 适配Phi-3.5的16K上下文长度
+                max_tokens=16000,  # 适配qwen3-4b的32K上下文长度
                 **extra_params,
             )
 
