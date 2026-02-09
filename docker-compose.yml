@@ -56,7 +56,7 @@ services:
     # 注意：这里直接写参数，不要加 "vllm" 和 "serve"
     # 如果镜像报错找不到模型，请尝试将模型名作为第一个参数
     command: [
-      "--model", "Qwen/Qwen3-0.6B",
+      "--model", "iiiorg/piiranha-v1-detect-personal-information",
       "--host", "0.0.0.0",
       "--port", "8001",
       "--max-num-seqs", "8",
