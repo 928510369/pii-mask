@@ -182,7 +182,7 @@ Output: {"detections": [{"type": "Phone", "original": "021-12345678"}, {"type": 
                 ],
                 temperature=0.7,
                 top_p=0.8,
-                max_tokens=16000,  # 适配qwen3-4b的32K上下文长度
+                max_tokens=4000,  # 适配qwen3-4b的32K上下文长度
                 **extra_params,
             )
 
