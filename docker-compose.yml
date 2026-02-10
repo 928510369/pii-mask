@@ -56,10 +56,9 @@ services:
     # 注意：这里直接写参数，不要加 "vllm" 和 "serve"
     # 如果镜像报错找不到模型，请尝试将模型名作为第一个参数
     command: [
-      "--model", "Qwen/Qwen3-4B-AWQ",
+      "Qwen/Qwen3-4B-AWQ",
       "--host", "0.0.0.0",
       "--port", "8001",
-      "--trust-remote-code",
       "--dtype", "float16",
       "--max-model-len", "32768",
       "--gpu-memory-utilization", "0.90",
