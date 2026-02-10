@@ -56,7 +56,7 @@ services:
     # 注意：这里直接写参数，不要加 "vllm" 和 "serve"
     # 如果镜像报错找不到模型，请尝试将模型名作为第一个参数
     command: [
-      "--model", "Qwen/Qwen3-4B-AWQ",
+      "--model", "AdamLucek/Qwen3-4B-Instruct-2507-PII-RL",
       "--host", "0.0.0.0",
       "--port", "8001",
       "--trust-remote-code",

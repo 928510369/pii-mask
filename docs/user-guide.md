@@ -130,6 +130,7 @@ Example: `name 2` `email 1` `phone 1`
 
 - **Longer text with multiple PII types** tends to produce better detection results
 - **Chinese text** is supported natively by the Qwen3 model
-- The 0.6B model works best with **structured PII** (phone numbers, emails, ID numbers)
-- For better name detection, consider using a larger model (Qwen3-4B+)
+- The 4B PII-RL model works best with **complex PII detection** including names, addresses, and custom categories
+- For resource-constrained environments, the 0.6B model is still available for basic PII detection
 - Custom categories work best with clear, single-word descriptions
+- The PII-RL model has been specifically fine-tuned for PII recognition and redaction tasks
