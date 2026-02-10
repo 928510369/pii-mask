@@ -195,8 +195,10 @@ Output: {"detections": [{"type": "Phone", "original": "021-12345678"}, {"type": 
                 logger.warning("Failed to parse JSON from: %s", content[:500])
                 return {"detections": [], "error": "Failed to parse LLM response as JSON"}
 
-            # Validate and fix positions by finding actual text in input
+            # Validate and fix positions by finding all occurrences of each entity in text
             detections = []
+            processed_entities = set()  # Track processed (original_text, type) pairs to avoid duplicates
+            
             for det in result.get("detections", []):
                 original = det.get("original", "")
                 det_type = det.get("type", "unknown")
@@ -204,32 +206,65 @@ Output: {"detections": [{"type": "Phone", "original": "021-12345678"}, {"type": 
                 if not original:
                     continue
 
-                # Find the actual position in text
-                start = text.find(original)
-                if start != -1:
+                # Create a unique key for this entity to track processing
+                entity_key = (original, det_type)
+                
+                # Skip if we've already processed this exact entity
+                if entity_key in processed_entities:
+                    continue
+                
+                processed_entities.add(entity_key)
+                
+                # Find ALL occurrences of this entity in the text
+                positions = self._find_all_occurrences(text, original)
+                
+                # Add detection for each occurrence
+                for start, end, actual_text in positions:
                     detections.append({
                         "type": det_type,
-                        "original": original,
+                        "original": actual_text,
                         "start": start,
-                        "end": start + len(original),
+                        "end": end,
                     })
-                else:
-                    # Try case-insensitive search
-                    lower_start = text.lower().find(original.lower())
-                    if lower_start != -1:
-                        actual = text[lower_start:lower_start + len(original)]
-                        detections.append({
-                            "type": det_type,
-                            "original": actual,
-                            "start": lower_start,
-                            "end": lower_start + len(actual),
-                        })
 
             return {"detections": detections}
 
         except Exception as e:
             logger.exception("LLM service error")
             return {"detections": [], "error": str(e)}
+
+
+    def _find_all_occurrences(self, text: str, original: str) -> list[tuple[int, int, str]]:
+        """Find all occurrences of original text in the input text.
+        
+        Returns list of tuples: (start_pos, end_pos, actual_matched_text)
+        """
+        positions = []
+        start_pos = 0
+        
+        # First try exact match
+        while start_pos < len(text):
+            pos = text.find(original, start_pos)
+            if pos == -1:
+                break
+            positions.append((pos, pos + len(original), original))
+            start_pos = pos + 1
+        
+        # If no exact matches found, try case-insensitive search
+        if not positions:
+            text_lower = text.lower()
+            original_lower = original.lower()
+            start_pos = 0
+            
+            while start_pos < len(text):
+                pos = text_lower.find(original_lower, start_pos)
+                if pos == -1:
+                    break
+                actual_text = text[pos:pos + len(original)]
+                positions.append((pos, pos + len(original), actual_text))
+                start_pos = pos + 1
+        
+        return positions
 
 
 llm_service = LLMService()
