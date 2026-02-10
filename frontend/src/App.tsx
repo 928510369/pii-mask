@@ -182,10 +182,7 @@ function App() {
             <div className="navbar-subtitle">PII Shield</div>
           </div>
         </div>
-        <div className="navbar-status">
-          <span className="status-dot" />
-          Qwen3-0.6B Online
-        </div>
+
       </nav>
 
       {/* Main Content */}

@@ -63,11 +63,6 @@ describe('App Component - Rendering', () => {
     expect(link).toHaveAttribute('href', 'https://www.alta-lex.ai/');
   });
 
-  it('shows Qwen3-0.6B status', () => {
-    render(<App />);
-    expect(screen.getByText('Qwen3-0.6B Online')).toBeInTheDocument();
-  });
-
   it('renders file upload area', () => {
     render(<App />);
     expect(screen.getByText('Drop a file here or click to upload')).toBeInTheDocument();
