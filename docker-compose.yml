@@ -44,6 +44,9 @@ services:
       - VLLM_USE_XFORMERS=1
       # 某些情况下防止 NCCL 在旧卡上尝试 P2P 导致崩溃
       - NCCL_P2P_DISABLE=1
+      # 新版本推荐的 T4 GPU 优化配置
+      - VLLM_ATTENTION_BACKEND=FLASHINFER
+      - CUDA_DEVICE_ORDER=PCI_BUS_ID
     volumes:
       - vllm-cache:/root/.cache
     deploy:
@@ -56,16 +59,16 @@ services:
     # 注意：这里直接写参数，不要加 "vllm" 和 "serve"
     # 如果镜像报错找不到模型，请尝试将模型名作为第一个参数
     command: [
-      "--model", "AdamLucek/Qwen3-4B-Instruct-2507-PII-RL",
+      "AdamLucek/Qwen3-4B-Instruct-2507-PII-RL",
       "--host", "0.0.0.0",
       "--port", "8001",
-      "--trust-remote-code",
       "--dtype", "float16",
       "--max-model-len", "32768",
-      "--gpu-memory-utilization", "0.90",
+      "--gpu-memory-utilization", "0.85",
       "--max-num-seqs", "1",
       "--enforce-eager",
-      "--disable-log-stats"
+      "--disable-log-stats",
+      "--tokenizer-mode", "auto"
     ]
     restart: unless-stopped
 
