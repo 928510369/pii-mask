@@ -1,7 +1,7 @@
 import io
 import pandas as pd
 from PyPDF2 import PdfReader
-from docx import Document
+from docx2python import docx2python
 
 
 SUPPORTED_EXTENSIONS = {".txt", ".pdf", ".docx", ".csv", ".xlsx"}
@@ -22,8 +22,32 @@ def parse_pdf(content: bytes) -> str:
 
 
 def parse_docx(content: bytes) -> str:
-    doc = Document(io.BytesIO(content))
-    return "\n".join(para.text for para in doc.paragraphs if para.text.strip())
+    """解析DOCX文件内容并去除重复段落"""
+    # 直接使用docx2python处理bytes内容
+    from docx2python import docx2python
+    import io
+    
+    # 创建BytesIO对象供docx2python使用
+    file_stream = io.BytesIO(content)
+    
+    with docx2python(file_stream) as docx_content:
+        full_text = docx_content.text
+
+        # 按段落去重
+        paragraphs = full_text.split('\n')
+
+        # 使用字典保持顺序的去重
+        seen = {}
+        unique_paragraphs = []
+
+        for para in paragraphs:
+            para = para.strip()
+            if para and para not in seen:
+                seen[para] = True
+                unique_paragraphs.append(para)
+
+        cleaned_text = '\n'.join(unique_paragraphs)
+        return cleaned_text
 
 
 def parse_csv(content: bytes) -> str:
